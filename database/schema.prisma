@@ -1,0 +1,26 @@
+//database
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+//generator
+generator client {
+    provider             = "prisma-client-py"
+    interface            = "asyncio"
+    recursive_type_depth = 5
+}
+
+enum Role {
+    USER
+    ADMIN
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String   @unique
+    password  String
+    createdAt DateTime @default(now())
+    role      Role     @default(USER)
+}

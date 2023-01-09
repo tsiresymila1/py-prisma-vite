@@ -1,0 +1,9 @@
+__pycache__
+.env
+.idea
+.vscode
+poetry.lock
+
+node_modules
+yarn.lock
+package-lock.json
