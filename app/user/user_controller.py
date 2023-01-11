@@ -7,7 +7,7 @@ from app.user.dto import CreateUserDTO
 
 
 class UserController(Controller):
-    path = "/api/users"
+    path = "/users"
     tags = ['Users']
     security=[{"BearerToken": []}]
 
