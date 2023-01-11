@@ -27,7 +27,7 @@ class Vite:
 
     @staticmethod
     def getManifest() -> dict[str, Any]:
-        f = open(Path(os.getcwd(), 'public/js/bundle/manifest.json'),'r')
+        f = open(Path(os.getcwd(), 'public/manifest.json'),'r')
         content = f.read()
         return json.loads(content)
 
@@ -37,13 +37,13 @@ class Vite:
         manifest = Vite.getManifest()
         if 'imports' in manifest.get(entry):
             for imports in manifest.get(entry).keys():
-                urls.append('/static/js/bundle/' . manifest.get(imports)['file'])
+                urls.append(manifest.get(imports)['file'])
         return urls
 
     @staticmethod
     def assetUrl(entry: str):
         manifest: dict[str, Any] = Vite.getManifest()
-        return '/static/js/bundle/'+manifest.get(entry)['file'] if entry in manifest.keys() else ''
+        return manifest.get(entry)['file'] if entry in manifest.keys() else ''
 
     @staticmethod
     def cssUrls(entry: str):
@@ -52,7 +52,7 @@ class Vite:
         if 'css' in manifest.get(entry):
             csss: list[str] =  manifest.get(entry)['css']
             for css in csss :
-                urls.append('/static/js/bundle/'+manifest.get(css)['file'])
+                urls.append(css)
         return urls
 
     @staticmethod
@@ -68,7 +68,7 @@ class Vite:
     def jsTag(entry: str):
         if Vite.isDev():
             url = Vite.URL()
-            tag = "\{\}"
+            tag = "{}"
             return f""" 
                 <script>
                     window.$RefreshReg$ = () => {tag}

@@ -7,3 +7,8 @@ poetry.lock
 node_modules
 yarn.lock
 package-lock.json
+
+
+public/manifest.json
+public/static/js/bundle
+!public/static/.gitkeep

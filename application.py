@@ -34,6 +34,6 @@ app = Starlite(
     template_config=template_config,
     debug=True,
     static_files_config=StaticFilesConfig(
-        path="/static", directories=[Path("public")])
+        path="/static", directories=[Path("public/static")])
 
 )

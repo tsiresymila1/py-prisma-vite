@@ -4,7 +4,7 @@ from os import getenv
 from typing import Any
 from prisma.models import User
 from pydantic import BaseModel
-import argon2
+import bcrypt
 
 from starlite import (
     ASGIConnection,
@@ -14,7 +14,8 @@ from starlite import (
     Request,
     Response,
     post,
-    NotAuthorizedException
+    NotAuthorizedException,
+    ValidationException
 )
 
 
@@ -61,11 +62,13 @@ jwt_auth = DefineMiddleware(JWTAuthenticationMiddleware, exclude=excludes)
 async def login(request: "Request[Any, Any]", data: LoginDto, db: Prisma) -> Response[User]:
     user: User | None = await db.user.find_first(where={
         "email": data.email,
-        "password": data.password  # argon2.argon2_hash(data.password)
     })
     if user:
-        await request.cache.set(str(user.id), user.dict())
-        response = auth.login(identifier=str(user.id), response_body=user)
-        return response
+        if bcrypt.checkpw(data.password.encode('utf8'), user.password):
+            await request.cache.set(str(user.id), user.dict())
+            response = auth.login(identifier=str(user.id), response_body=user)
+            return response
+        else:
+            raise ValidationException(detail="Password incorrect")
     else:
-        raise NotAuthorizedException()
+        raise ValidationException(detail="User not found")

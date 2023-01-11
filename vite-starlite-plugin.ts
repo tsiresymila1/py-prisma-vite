@@ -4,24 +4,26 @@ import { PluginOption, ResolvedConfig } from "vite";
 import FullReload from "vite-plugin-full-reload";
 
 export default function ViteStarlitePlugin(config?: {
+  base?: string;
   root?: string;
   public?: string;
   entry?: string;
   output?: string;
   port?: number;
-  host?: string;
+  host?: string; 
   apiServer?: string;
   isHttps?: boolean;
 }): PluginOption {
   var pluginConfig = {
+    base: config?.base ?? "static",
     root: config?.root ?? "ressources/assets/js",
     public: config?.public ?? "public",
     entry: config?.entry ?? "index.tsx",
-    output: config?.output ?? "public/js/bundle",
+    output: config?.output ?? `${config?.base ?? "static"}/js/bundle`,
     port: config?.port ?? 5133,
     host: config?.host ?? "localhost",
     apiServer: config?.apiServer ?? "http://localhost:8000",
-    isHttps: config?.isHttps ?? false,
+    isHttps: config?.isHttps ?? false, 
   };
   let resolvedConfig: ResolvedConfig;
   return {
@@ -29,6 +31,7 @@ export default function ViteStarlitePlugin(config?: {
     config(config) {
       return {
         ...config,
+        base: `./${config?.base}`,
         root: pluginConfig.root,
         publicDir: pluginConfig.public,
         define: {
@@ -54,23 +57,29 @@ export default function ViteStarlitePlugin(config?: {
           entries: [resolve(pluginConfig.root, pluginConfig.entry)],
         },
         build: {
-          assetsDir: pluginConfig.public,
+          assetsDir: pluginConfig.output,
           manifest: true,
-          emptyOutDir: true,
-          outDir: resolve(pluginConfig.output),
+          emptyOutDir: false,
+          outDir: resolve(pluginConfig.public),
           rollupOptions: {
             external: ["React", "Vue"],
             input: resolve(pluginConfig.root, pluginConfig.entry),
+            cache: false,
             output: {
               format: "cjs",
+              manualChunks: undefined,
+              chunkFileNames: (chunk) => {
+                console.log("Chunk", chunk);
+                return `[name].js`;
+              },
               assetFileNames: (assetInfo) => {
-                if (assetInfo.name === "style.css") {
-                  return "app.css";
+                if (assetInfo.name === "main.css") {
+                  return `${pluginConfig.output}/app.css`;
                 }
-                // if (assetInfo.type === "asset"){
-                //   return (assetInfo.source as Buffer).toString('base64')
-                // }
-                return assetInfo.name ?? "app.js";
+                if (assetInfo.name === pluginConfig.entry) {
+                  return `${pluginConfig.output}/app.js`;
+                }
+                return `${pluginConfig.output}/${assetInfo.name}` ?? "app.js";
               },
             },
           },
