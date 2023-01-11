@@ -3,8 +3,6 @@ from starlite import CORSConfig, Starlite, OpenAPIConfig, StaticFilesConfig, Tem
 from starlite.contrib.jinja import JinjaTemplateEngine
 from pydantic_openapi_schema.v3_1_0 import Components, SecurityScheme
 
-
-from app.auth import jwt_auth
 from routes import web_router, api_router
 from ressources import Vite
 from database.plugin import PrismaPlugin
@@ -21,7 +19,6 @@ template_config.engine_instance.engine.globals['vite'] = Vite.vite
 app = Starlite(
     route_handlers=[web_router, api_router],
     plugins=[prisma_plugin],
-    middleware=[jwt_auth],
     cors_config=CORSConfig(),
     openapi_config=OpenAPIConfig(
         title="WEBSEC API",

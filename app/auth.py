@@ -44,8 +44,6 @@ auth = JWTAuth[User](
 class JWTAuthenticationMiddleware(AbstractAuthenticationMiddleware):
     async def authenticate_request(self, connection: ASGIConnection) -> AuthenticationResult:
         auth_header = connection.headers.get('Authorization')
-        if not connection.url.path.startswith('/api'):
-            return AuthenticationResult(user=None, auth=None)
         if not auth_header:
             raise NotAuthorizedException()
         token: Token = Token.decode(encoded_token=auth_header.replace(
