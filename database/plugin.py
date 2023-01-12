@@ -12,6 +12,7 @@ class PrismaPlugin(PluginProtocol[Any]):
         self._db = Prisma()
 
     async def start(self, _: Request) -> None:
+        print("DB initialized ")
         await self._db.disconnect()
         await self._db.connect()
 
@@ -24,6 +25,6 @@ class PrismaPlugin(PluginProtocol[Any]):
 
     def on_app_init(self, app: Starlite) -> None:
         app.dependencies.update({"db": Provide(self.getDB)})
-        app.before_request = self.start
-        app.after_request = self.stop
+        app.on_startup = [self.start]
+        app.on_shutdown = [self.stop]
         return super().on_app_init(app)

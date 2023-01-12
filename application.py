@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Any
+from prisma import Prisma
 from starlite import CORSConfig, Request, Response, Starlite, OpenAPIConfig, StaticFilesConfig, TemplateConfig, HttpMethod
 from starlite.response import RedirectResponse
 from starlite.status_codes import HTTP_405_METHOD_NOT_ALLOWED
@@ -61,12 +62,16 @@ app = io.get_asgi_app()
 
 @io.on("connect")
 def connect(sid: Any, environ: Any):
-    print("Client connected : ", sid, environ)
+    print("Client connected : ")
+
 
 @io.on('message')
-async def message(sid: Any,data: Any):
-    print("message : ",sid,data)
-    await io.emit('message', {"response": "ok"})   
+async def message(sid: Any, data: Any):
+    db = io.load_dependancy("db")
+    users = await db.user.find_many()
+    print("message : ", sid, data)
+    await io.emit('message', {"response": users})
+
 
 @io.on("disconnect")
 def disconnect(sid: Any):

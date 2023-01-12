@@ -36,7 +36,7 @@ addIcons(...Object.values({ ...FaIcons }), ...Object.values({ ...BIcons }));
 app.use(new VueSocketIO({
   debug: true,
   connection:io("/", {
-    transpots: ["polling", "websocket"]
+    transports: ["polling", "websocket"]
   }),
 }))
 

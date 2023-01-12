@@ -1,7 +1,8 @@
 <template>
   <div class="flex h-[100vh] bg-white-100 my-0">
     <div class="m-auto">
-      <div
+      <form autocomplete="off">
+        <div
         class="bg-white shadow-md border border-gray-100 md:w-[28rem] w-[80vw] p-8 rounded-sm"
       >
         <div class="space-y-3">
@@ -14,6 +15,7 @@
             </h3>
           </div>
           <vt-input
+            autocomplete="off"
             focusclass="border-[var(--app-base-color)]"
             id="email"
             type="text"
@@ -24,6 +26,7 @@
             <template v-slot:addon><v-icon name="fa-user"></v-icon></template>
           </vt-input>
           <vt-input
+            autocomplete="off"
             focusclass="border-[var(--app-base-color)]"
             id="password"
             type="password"
@@ -60,6 +63,7 @@
           </div>
         </div>
       </div>
+      </form>
     </div>
   </div>
 </template>

@@ -1,13 +1,18 @@
-from typing import Union
-from starlite import  Starlite, Provide
+from typing import Any, TypeVar, Union
+from starlite import Starlite, Provide
 from starlite.types import Scope, Receive, Send
 import socketio
 
+
+T = TypeVar("T")
 
 
 class SocketManager:
     _app: socketio.ASGIApp
     _sio: socketio.AsyncServer
+    _dependencies: dict[str, Any] = {}
+    _starlite: Starlite
+
     def __init__(
             self,
             app: Starlite,
@@ -20,22 +25,31 @@ class SocketManager:
         self._sio = socketio.AsyncServer(
             logger=True,
             engineio_logger=True,
-            async_mode=async_mode, cors_allowed_origins=cors_allowed_origins,namespaces=namespace, **kwargs)
-        
+            async_mode=async_mode, cors_allowed_origins=cors_allowed_origins, namespaces=namespace, **kwargs)
+
         app.dependencies.update({"sio": Provide(lambda: self)})
+        if "db" in app.dependencies.keys():
+            db = app.dependencies.get("db")
+            self._dependencies["db"] = db.dependency.value
 
         self._app = socketio.ASGIApp(
             socketio_path=socketio_path,
             socketio_server=self._sio, other_asgi_app=app)
-        
+        self._starlite = app
+
     def get_asgi_app(self) -> socketio.ASGIApp:
         return self._app
 
     def is_asyncio_based(self) -> bool:
         return True
 
-    async def socket_io_handler(self,scope: Scope, receive: Receive, send: Send) -> None:
-        await self._app(scope=scope,receive=receive,send=send)
+    async def socket_io_handler(self, scope: Scope, receive: Receive, send: Send) -> None:
+        await self._app(scope=scope, receive=receive, send=send)
+
+    def load_dependancy(self, key: str) -> T:
+        if key in self._dependencies.keys() :
+            return self._dependencies[key]()
+        return None
 
     @property
     def on(self):
@@ -100,5 +114,3 @@ class SocketManager:
     @property
     def event(self):
         return self._sio.event
-
-        
