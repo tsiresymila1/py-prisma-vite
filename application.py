@@ -30,7 +30,7 @@ def handle_method_not_allowed(request: Request, exc: MethodNotAllowedException) 
     return Response(content={"detail": exc.detail, "status_code": exc.status_code}, status_code=exc.status_code)
 
 
-app = Starlite(
+startite_app = Starlite(
     route_handlers=[web_router, api_router],
     plugins=[prisma_plugin],
     cors_config=CORSConfig(),
@@ -55,13 +55,18 @@ app = Starlite(
 
 )
 
-io = SocketManager(app=app)
+io = SocketManager(app=startite_app)
+app = io.get_asgi_app()
 
 
 @io.on("connect")
 def connect(sid: Any, environ: Any):
     print("Client connected : ", sid, environ)
 
+@io.on('message')
+async def message(sid: Any,data: Any):
+    print("message : ",sid,data)
+    await io.emit('message', {"response": "ok"})   
 
 @io.on("disconnect")
 def disconnect(sid: Any):

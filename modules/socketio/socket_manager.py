@@ -1,5 +1,5 @@
 from typing import Union
-from starlite import  Starlite, Provide, ASGIRouteHandler
+from starlite import  Starlite, Provide
 from starlite.types import Scope, Receive, Send
 import socketio
 
@@ -11,7 +11,6 @@ class SocketManager:
     def __init__(
             self,
             app: Starlite,
-            mount_location: str = "/",
             socketio_path: str = "socket.io",
             cors_allowed_origins: Union[str, list] = '*',
             namespace: str = "/",
@@ -19,14 +18,18 @@ class SocketManager:
             **kwargs
     ):
         self._sio = socketio.AsyncServer(
-            async_mode=async_mode, cors_allowed_origins=cors_allowed_origins, **kwargs, namespaces=namespace)
-        self._app = socketio.ASGIApp(
-            socketio_server=self._sio, socketio_path=socketio_path)
-
-        handler: ASGIRouteHandler = ASGIRouteHandler(path="/socket.io/",)(self.socket_io_handler)
-        app.dependencies.update({"sio": Provide(lambda: self)})
-        app.register(handler)
+            logger=True,
+            engineio_logger=True,
+            async_mode=async_mode, cors_allowed_origins=cors_allowed_origins,namespaces=namespace, **kwargs)
         
+        app.dependencies.update({"sio": Provide(lambda: self)})
+
+        self._app = socketio.ASGIApp(
+            socketio_path=socketio_path,
+            socketio_server=self._sio, other_asgi_app=app)
+        
+    def get_asgi_app(self) -> socketio.ASGIApp:
+        return self._app
 
     def is_asyncio_based(self) -> bool:
         return True

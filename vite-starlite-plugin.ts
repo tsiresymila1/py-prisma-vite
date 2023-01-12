@@ -31,7 +31,7 @@ export default function ViteStarlitePlugin(config?: {
     config(config) {
       return {
         ...config,
-        base: `./${config?.base}`,
+        base: `./${config?.base ?? ''}`,
         root: pluginConfig.root,
         publicDir: pluginConfig.public,
         define: {

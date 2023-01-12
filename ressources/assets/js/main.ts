@@ -1,8 +1,9 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
-import VueSocketIO from 'vue-3-socket.io'
-import SocketIO from 'socket.io-client'
+import VueSocketIO from "vue-3-socket.io";
+// import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js"
+import {io} from 'socket.io-client'
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import Toast from "vue-toastification";
@@ -34,11 +35,14 @@ const router = createRouter({
 addIcons(...Object.values({ ...FaIcons }), ...Object.values({ ...BIcons }));
 app.use(new VueSocketIO({
   debug: true,
-  connection:"http://localhost:8000",
-  options: {
-    path: "/socket.io",
-  }
+  connection:io("/", {
+    transpots: ["polling", "websocket"]
+  }),
 }))
+
+
+
+
 app.use(pinia);
 app.use(router);
 app.component("v-icon", OhVueIcon);
@@ -59,3 +63,4 @@ app.use(Toast, {
 });
 
 router.isReady().then(() => app.mount("#app"));
+
