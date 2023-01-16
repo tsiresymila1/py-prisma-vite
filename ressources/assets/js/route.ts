@@ -2,6 +2,7 @@ import { RouteRecordRaw } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
   {
+    name: "home",
     path: "/",
     component: import("./components/layout/Dashboard.vue"),
     children: [
@@ -30,10 +31,17 @@ export const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    name: "login",
     path: "/login",
     component: import("./pages/Login.vue"),
   },
   {
+    name: "register",
+    path: "/register",
+    component: import("./pages/Register.vue"),
+  },
+  {
+    name: "notfound",
     path: "/:pathMatch(.*)*",
     component: import("./pages/NotFound.vue"),
   },

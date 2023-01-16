@@ -7,7 +7,7 @@
         >
           <div class="space-y-3">
             <div class="flex items-center justify-center pb-[30px] pt-2">
-              <img :src="logo" class="h-[80px] object-contain" alt="logo" />
+              <img src="../assets/vue.svg" class="h-[80px] object-contain" alt="logo" />
             </div>
             <div class="flex items-center justify-center py-2">
               <h3 class="text-[var(--app-base-color)] text-2xl font-bold">
@@ -45,7 +45,7 @@
               <option value="Test">Test</option>
               <option value="Test">Test</option>
             </vt-select>
-            <div className="flex pt-4 pb-4">
+            <div className="flex pt-4 pb-2">
               <vt-button
                 :disabled="false"
                 type="button"
@@ -55,10 +55,21 @@
                 <img
                   v-if="isloading"
                   className="w-[20px] h-[20px] inline"
-                  :src="spinner"
+                  src="../assets/loader.gif"
                   alt="spinner"
                 />
                 <span v-else>Login</span>
+              </vt-button>
+            </div>
+            <div className="flex w-full pt-1 pb-2 justify-end ">
+              <div class="text-[#acacac]">Dont't have any account ?</div>
+              <vt-button
+                :disabled="false"
+                type="button"
+                class="bg-transparent text-center text-[var(--app-base-color)] rounded-none py-[2px]"
+                @click="singup"
+              >
+                <span>Register</span>
               </vt-button>
             </div>
           </div>
@@ -69,8 +80,6 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
-import logo from "../assets/vue.svg";
-import spinner from "../assets/loader.gif";
 import { useAuth } from "../store/auth";
 
 export default defineComponent({
@@ -90,8 +99,6 @@ export default defineComponent({
   },
   data: () => {
     return {
-      logo,
-      spinner,
       isloading: false as boolean,
     };
   },
@@ -108,7 +115,12 @@ export default defineComponent({
       await this.login(this.email, this.password);
       this.isloading = false;
       this.$router.push({
-        path: "/",
+        name: "/",
+      });
+    },
+    singup: function () {
+      this.$router.push({
+        name: "register",
       });
     },
   },

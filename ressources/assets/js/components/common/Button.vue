@@ -8,7 +8,7 @@
 </template>
 <script lang="ts" setup>
 interface Props extends ButtonHTMLAttributes {
-  error: null
+  error?: null
 }
 defineProps<Props>();
 </script>

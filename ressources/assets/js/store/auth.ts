@@ -17,10 +17,11 @@ export const useAuth = defineStore("auth", {
     async login(email: string, password: string) {
       const user: IUser = {
         id: uuidv4().replaceAll("-", ""),
-        name: "Tsiresy MIlà",
+        name: "Tsiresy Milà",
         role: "ADMIN",
-        email: "tsiresymila@gmail.com",
-        password: "testtest",
+        username: "Username",
+        email: email,
+        password: password,
       };
       this.user = user;
       this.token = "test Token";

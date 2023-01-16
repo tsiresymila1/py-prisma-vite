@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["ESNext", "DOM","ES2021.String"],
+    "lib": ["ESNext", "DOM","ES2021"],
     "skipLibCheck": true,
     "noEmit": true,
     "types": ["vite-env.d.ts"]

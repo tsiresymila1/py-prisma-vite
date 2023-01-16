@@ -51,8 +51,16 @@ startite_app = Starlite(
         ),),
     template_config=template_config,
     debug=True,
-    static_files_config=StaticFilesConfig(
-        path="/static", directories=[Path("public/static")])
+    static_files_config=[
+        StaticFilesConfig(
+            path="/static",
+            directories=[Path("public/static")]
+        ),
+        StaticFilesConfig(
+            path="/private/files",
+            directories=[Path("public/files")]
+        )
+    ]
 
 )
 

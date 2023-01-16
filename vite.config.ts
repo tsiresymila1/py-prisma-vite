@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     vue(),
     ViteStarlitePlugin({
-      apiServer: "http://locahost:8000",
+      apiServer: "http://localhost:8000",
       entry: "main.ts"
     }),
     eslint()

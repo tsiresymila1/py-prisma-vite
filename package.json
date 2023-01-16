@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^3.6.4",
+    "axios": "^1.2.2",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.2",
