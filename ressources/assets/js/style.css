@@ -30,9 +30,10 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   --app-base-color: #358b8c;
-  --app-second-color: #358b8c;
+  --app-second-color: #286c6d;
   --app-base-bg: #f3f3f3 !important;
   --app-navbar-color: rgba(57,74,121,0.2)
+  --app-text-color : #000000b6
 }
 
 a {

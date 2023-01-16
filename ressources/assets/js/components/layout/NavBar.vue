@@ -6,26 +6,32 @@
       class="px-0 flex flex-wrap items-center justify-between w-[100%] my-auto"
     >
       <div class="flex my-auto">
-        <span @click="ontoggle"
-          ><v-icon
+        <span @click="ontoggle">
+          <v-icon
             name="fa-bars"
             class="text-[var(--app-base-color)] cursor-pointer mt-[4px] mt-2"
-          ></v-icon
-        ></span>
+          >
+          </v-icon>
+        </span>
         <div class="text-[#000000b6] font-bold flex ml-2 mt-2">
           <template v-for="(loc, index) in locations">
-            <span v-if="index === 0">
+            <span v-if="index === 0 && index === locations.length -1" :key="`${new Date().toDateString()}-${loc}`" >
               <span class="ml-2">{{
                 loc.charAt(0).toUpperCase() + loc.slice(1)
               }}</span>
             </span>
-            <span v-else>
-              <router-link :to="'/' + loc">
+            <span v-else-if="index !== locations.length -1" :key="`${new Date().toDateString()}-${loc}`">
+              <router-link class="decoration-none font-bold text-[var(--app-text-color)] hover:text-[var(--app-text-color)]" :to="'/' + loc">
                 <span class="ml-2">{{
                   loc.charAt(0).toUpperCase() + loc.slice(1)
                 }}</span>
-                <span class="ml-2">/</span>
               </router-link>
+              <span class="ml-2">/</span>
+            </span>
+            <span v-else :key="`${new Date().toDateString()}-${index}`">
+                <span class="ml-2">{{
+                  loc.charAt(0).toUpperCase() + loc.slice(1)
+                }}</span>
             </span>
           </template>
         </div>
@@ -47,7 +53,7 @@
         <div class="relative inline-block">
           <vt-dropdown class="z-0" dataTarget="#dropProfile">
             <span className="mx-4">Jane Doe</span>
-            <img :src="avatar" alt="" className="w-[40px] h-[40px]" />
+            <img src="../../assets/avatar.svg" alt="" className="w-[40px] h-[40px]" />
             <v-icon class="ml-2" name="fa-chevron-down"></v-icon>
           </vt-dropdown>
           <vt-dropdown-profile-content
@@ -63,7 +69,6 @@ defineProps<{ ontoggle: () => void }>();
 </script>
 <script lang="ts">
 import { defineComponent } from "vue";
-import avatar from "../../assets/avatar.svg";
 import VtDropdownProfileContent from "./DropDownProfileContent.vue";
 type LoationType = string[];
 
@@ -71,7 +76,6 @@ export default defineComponent({
   components: { VtDropdownProfileContent },
   data: function () {
     return {
-      avatar,
       locations: [] as LoationType,
     };
   },
@@ -82,13 +86,14 @@ export default defineComponent({
   },
   mounted() {
     this.$router.beforeEach((to) => {
-      this.locations = to.fullPath
+      this.locations = (to.fullPath as string)
         .split("/")
-        .filter((e) => e !== "")
-        .reduce<LoationType>((d, n) => {
+        .filter((e: string) => e !== "")
+        .reduce<LoationType>((d: any[], n: any) => {
           d.push(n);
           return d;
         }, []);
+        console.log("path :",this.locations)
     });
   },
 });

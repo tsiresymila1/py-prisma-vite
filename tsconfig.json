@@ -9,10 +9,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM","ES2021.String"],
     "skipLibCheck": true,
     "noEmit": true,
     "types": ["vite-env.d.ts"]
+    
   },
   "include": ["assets/**/*.ts", "assets/**/*.d.ts", "assets/**/*.tsx", "assets/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]

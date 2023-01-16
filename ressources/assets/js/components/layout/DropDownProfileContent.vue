@@ -6,26 +6,26 @@
     }`"
   >
     <div
-      className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+      class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
     >
       <img
-        className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+        class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
         :src="avatar"
         alt="jane avatar"
       />
-      <div className="mx-1">
-        <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+      <div class="mx-1">
+        <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
           Jane Doe
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
           janedoe@exampl.com
         </p>
       </div>
     </div>
-    <hr className="border-gray-300 dark:border-gray-700 " />
+    <hr class="border-gray-300 dark:border-gray-700" />
     <button
+      class="w-full px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
       @click="logout"
-      className="w-full px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
     >
       Sign Out
     </button>
@@ -35,7 +35,7 @@
 import { defineComponent } from "vue";
 import avatar from "../../assets/avatar.svg";
 import { useAuth } from "../../store/auth";
-const auth = useAuth()
+const auth = useAuth();
 
 export default defineComponent({
   data: () => {
@@ -44,10 +44,10 @@ export default defineComponent({
     };
   },
   methods: {
-    logout: function(){
-      auth.logout()
-      this.$router.push('/login')
-    }
-  }
+    logout: function () {
+      auth.logout();
+      this.$router.push("/login");
+    },
+  },
 });
 </script>

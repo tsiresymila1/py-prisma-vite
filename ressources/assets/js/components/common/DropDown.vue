@@ -1,9 +1,9 @@
 <template>
   <button
     :="$attrs"
-    @click="toggleshow"
     class="relative flex items-center text-sm text-gray-600  border border-transparent rounded-md focus:outline-none"
-  >
+    @click="toggleshow"
+    >
     <slot></slot>
   </button>
 </template>
@@ -48,7 +48,9 @@ export default defineComponent({
       `${this.dataTarget} > .dropdown-item`
     )!;
     elm.forEach((e) => {
-      e.removeEventListener("click", (e) => {});
+      e.removeEventListener("click", () => {
+        console.log("removed")
+      });
     });
   },
 });

@@ -5,7 +5,7 @@ export default defineComponent({
     connect: function () {
       console.log('Socket to notification channel connected')
     },
-    message:function(data){
+    message: function(data){
       console.log("Data received : ", data)
     }
   },

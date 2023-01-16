@@ -45,11 +45,11 @@ app.use(new VueSocketIO({
 
 app.use(pinia);
 app.use(router);
-app.component("v-icon", OhVueIcon);
-app.component("vt-input", InputVue);
-app.component("vt-button", ButtonVue);
-app.component("vt-select", SelectVue);
-app.component("vt-dropdown", DropDownVue);
+app.component("VIcon", OhVueIcon);
+app.component("VtInput", InputVue);
+app.component("VtButton", ButtonVue);
+app.component("VtSelect", SelectVue);
+app.component("VtDropdown", DropDownVue);
 app.use(Toast, {
   hideProgressBar: true,
   transition: "Vue-Toastification__fade",

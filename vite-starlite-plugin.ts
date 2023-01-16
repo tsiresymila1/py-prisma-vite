@@ -14,7 +14,7 @@ export default function ViteStarlitePlugin(config?: {
   apiServer?: string;
   isHttps?: boolean;
 }): PluginOption {
-  var pluginConfig = {
+  const pluginConfig = {
     base: config?.base ?? "static",
     root: config?.root ?? "ressources/assets/js",
     public: config?.public ?? "public",
@@ -110,7 +110,7 @@ export default function ViteStarlitePlugin(config?: {
         server.middlewares.use((req, res, next) => {
           if (req.url === "/index.html") {
             res.statusCode = 200;
-            var content = fs.readFileSync(
+            const content = fs.readFileSync(
               join(__dirname, "dev-server-index.html")
             );
             res.end(content);

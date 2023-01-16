@@ -5,6 +5,6 @@
       "moduleResolution": "Node",
       "allowSyntheticDefaultImports": true
     },
-    "include": ["vite-env.d.ts","vite.config.ts","vite-starlite-plugin.ts"]
+    "include": ["vite.config.ts","vite-starlite-plugin.ts"]
   }
   

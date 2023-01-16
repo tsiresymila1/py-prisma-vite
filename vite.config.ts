@@ -9,6 +9,6 @@ export default defineConfig({
       apiServer: "http://locahost:8000",
       entry: "main.ts"
     }),
-    // eslint()
+    eslint()
   ],
 });

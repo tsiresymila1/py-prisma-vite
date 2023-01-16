@@ -4,16 +4,12 @@
       v-if="$props.label !== null"
       class="flex py-2 text-gray-500 text-sm"
       :for="idELmt"
-    >
+      >
       {{ $props.label }}
     </label>
     <div
-      :class="`flex items-start border ${
-        !focus && ($props.border ?? ' border-gray-300')
-      } rounded-none p-2 ${$props.containerclass ?? ''} ${
-        focus && ($props.focusclass ?? '')
-      }`"
-    >
+      :class="`flex items-start border ${!focus && ($props.border ?? ' border-gray-300')}  p-2 ${$props.containerclass ?? ''} ${focus && ($props.focusclass ?? '')}`"
+      >
       <span v-if="$slots.addon" class="px-1"><slot name="addon"></slot></span>
       <input
         :="$attrs"
@@ -41,7 +37,7 @@ import { defineComponent, defineProps, InputHTMLAttributes } from "vue";
 export default defineComponent({
   name: "vt-input",
   data: function () {
-    const focus: boolean = false;
+    const focus = false;
     const idELmt: string =
       (this.$attrs.id as string) ?? new Date().getTime().toString();
     return {

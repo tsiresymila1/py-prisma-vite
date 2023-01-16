@@ -1,9 +1,9 @@
 <template>
   <button
-    @click="redirect"
     :="$attrs"
-    :class="to === $route.fullPath ? 'bg-[var(--app-second-color)' : ''"
-    class="flex my-1 text-gray-300 pl-8 py-4 hover:text-gray-300 cursor-pointer hover:bg-[var(--app-second-color)] mx-4 rounded-lg focus:bg-[var(--app-second-color)]"
+    class="flex my-1 text-gray-300 pl-8 py-4 hover:text-gray-300 cursor-pointer bg-[var(--app-second-color) hover:bg-[var(--app-second-color)] mx-4 rounded-lg focus:bg-[var(--app-second-color)]"
+    :class="active ? 'bg-[var(--app-second-color)]' : ''"
+    @click="redirect"
   >
     <span class="mr-4">
       <slot name="icon"></slot>
@@ -22,18 +22,29 @@ defineProps<SidenavActionProps>();
 import { ButtonHTMLAttributes, defineComponent } from "vue";
 
 export default defineComponent({
+  data() {
+    return {
+      active: false,
+    };
+  },
+  mounted() {
+    this.updateColor();
+    this.$router.afterEach(() => {
+      this.updateColor();
+    });
+  },
   methods: {
     redirect: function () {
       this.$router.push(this.to);
     },
-  },
-  mounted() {
-    console.log(
-      "test",
-      this.to,
-      this.$route.fullPath,
-      this.to === this.$route.fullPath
-    );
+    updateColor: function () {
+      console.log(this.$route.fullPath as string, this.to);
+      if (this.to === "/") {
+        this.active = (this.$route.fullPath as string) === this.to;
+      } else {
+        this.active = (this.$route.fullPath as string).startsWith(this.to);
+      }
+    },
   },
 });
 </script>

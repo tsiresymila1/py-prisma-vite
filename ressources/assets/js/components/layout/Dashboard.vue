@@ -43,7 +43,9 @@ export default defineComponent({
   beforeRouteEnter: (_, __, next) => {
     const { isAuth } = useAuth();
     if (isAuth) {
-      next((___) => {});
+      next((___) => {
+        console.log("")
+      });
     } else {
       next("/login");
     }
