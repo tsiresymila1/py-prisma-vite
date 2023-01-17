@@ -10,22 +10,13 @@ type AuthState = {
 export const useAuth = defineStore("auth", {
   state: (): AuthState => ({ user: null, token: null }),
   getters: {
-    berear: (state) => `Bearer ${state.token ?? ""}`,
+    berear: (state) => `${state.token ?? ""}`,
     isAuth: (state) => state.user !== null,
   },
   actions: {
-    async login(email: string, password: string) {
-      const user: IUser = {
-        id: uuidv4().replaceAll("-", ""),
-        name: "Tsiresy Milà",
-        role: "ADMIN",
-        username: "Username",
-        email: email,
-        password: password,
-      };
-      this.user = user;
-      this.token = "test Token";
-      return Promise.resolve<IUser>(user);
+    login(token: string, user: any) {
+      this.user = user as IUser;
+      this.token = token;
     },
     logout() {
       this.user = null;

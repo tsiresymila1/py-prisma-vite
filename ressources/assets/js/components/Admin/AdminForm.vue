@@ -6,7 +6,7 @@
     <div class="flex mb-8 mt-2">
       <vt-button
         class="bg-[var(--app-base-color)] rounded-md active:bg-[var(--app-second-color)] text-white"
-        @click="$router.back()"
+        @click="$router.go(-1)"
       >
         <div class="flex">
           <v-icon name="fa-chevron-left" class="text-white mt-[1px] mr-2" />
@@ -35,12 +35,12 @@
           <div class="mb-4">
             <vt-input placeholder="Website">
               <template v-slot:addon>
-                <v-icon name="fa-linkedin" class=" mt-[1px] mr-2" />
+                <v-icon name="fa-linkedin" class="mt-[1px] mr-2" />
               </template>
             </vt-input>
           </div>
           <div class="mb-4">
-            <vt-input  placeholder="Linkedin"></vt-input>
+            <vt-input placeholder="Linkedin"></vt-input>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
       <div class="w-full mt-8 flex justify-end">
         <vt-button
           class="bg-[var(--app-base-color)] rounded-md active:bg-[var(--app-second-color)] text-white"
-          @click="$router.back()"
+          @click="$router.go(-1)"
         >
           <div class="flex">
             <v-icon name="fa-save" class="text-white mt-[1px] mr-2" />

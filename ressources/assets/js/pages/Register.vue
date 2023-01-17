@@ -236,9 +236,6 @@ export default defineComponent({
           console.log(resp);
         });
 
-      //   this.$router.push({
-      //     path: "/",
-      //   });
     },
     signin: function () {
       this.$router.push({

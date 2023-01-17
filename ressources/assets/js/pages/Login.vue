@@ -7,7 +7,11 @@
         >
           <div class="space-y-3">
             <div class="flex items-center justify-center pb-[30px] pt-2">
-              <img src="../assets/vue.svg" class="h-[80px] object-contain" alt="logo" />
+              <img
+                src="../assets/vue.svg"
+                class="h-[80px] object-contain"
+                alt="logo"
+              />
             </div>
             <div class="flex items-center justify-center py-2">
               <h3 class="text-[var(--app-base-color)] text-2xl font-bold">
@@ -18,12 +22,14 @@
               autocomplete="off"
               focusclass="border-[var(--app-base-color)]"
               id="email"
-              type="text"
-              label="Username"
-              placeholder="Username"
-              @change="onUsernameChange"
+              type="email"
+              label="E-mail"
+              placeholder="E-mail"
+              @input="onUsernameChange"
             >
-              <template v-slot:addon><v-icon name="fa-user"></v-icon></template>
+              <template v-slot:addon
+                ><v-icon name="fa-envelope"></v-icon
+              ></template>
             </vt-input>
             <vt-input
               autocomplete="off"
@@ -32,11 +38,11 @@
               type="password"
               label="Password"
               placeholder="Password"
-              @change="onPasswordChange"
+              @input="onPasswordChange"
             >
               <template v-slot:addon><v-icon name="fa-lock"></v-icon></template>
             </vt-input>
-            <vt-select
+            <!-- <vt-select
               focusclass="border-[var(--app-base-color)]"
               id="type"
               label="Type"
@@ -44,7 +50,7 @@
               <template v-slot:addon><v-icon name="fa-lock"></v-icon></template>
               <option value="Test">Test</option>
               <option value="Test">Test</option>
-            </vt-select>
+            </vt-select> -->
             <div className="flex pt-4 pb-2">
               <vt-button
                 :disabled="false"
@@ -80,6 +86,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
+import { axiosBase } from "../axiosBase";
 import { useAuth } from "../store/auth";
 
 export default defineComponent({
@@ -103,20 +110,37 @@ export default defineComponent({
     };
   },
   methods: {
-    onUsernameChange(evt: Event) {
-      console.log(evt.target);
+    onUsernameChange(evt: InputEvent) {
+      this.email = (evt.target as any).value;
     },
-    onPasswordChange(evt: Event) {
-      console.log(evt.target);
+    onPasswordChange(evt: InputEvent) {
+      this.password = (evt.target as any).value;
       this.disabled = false;
     },
     singin: async function () {
       this.isloading = true;
-      await this.login(this.email, this.password);
-      this.isloading = false;
-      this.$router.push({
-        name: "/",
-      });
+      axiosBase
+        .post(
+          "/login",
+          { email: this.email, password: this.password },
+          {
+            headers: {
+              "Content-Type": "json",
+            },
+          }
+        )
+        .finally(() => {
+          this.isloading = false;
+        })
+        .then((resp) => {
+          console.log(resp);
+          const token = resp.headers?.get("authorization");
+          this.login(token, resp.data);
+          console.log("token >>>", token);
+          this.$router.push({
+            name: "admin",
+          });
+        });
     },
     singup: function () {
       this.$router.push({

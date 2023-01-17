@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { useAuth } from "./store/auth";
+import Toast from "vue-toastification";
+import { useToast } from "vue-toastification";
 
 export const axiosBase = axios.create({
   baseURL: import.meta.env.VITE_ROTULU_API_BASE_URL,
@@ -37,7 +39,9 @@ axiosBase.interceptors.response.use(
     //     return Promise.reject(_error);
     //   }
     // }
-    console.log("Error", error.message)
+    const toast = useToast();
+    toast.error(error.message);
+    console.log("Error", error.message);
     return Promise.reject(error);
   }
 );

@@ -75,10 +75,10 @@ def connect(sid: Any, environ: Any):
 
 @io.on('message')
 async def message(sid: Any, data: Any):
-    db = io.load_dependancy("db")
+    db: Prisma = io.load_dependancy("db")
     users = await db.user.find_many()
     print("message : ", sid, data)
-    await io.emit('message', {"response": users})
+    await io.emit('message', {"response": [u.dict() for u in users]})
 
 
 @io.on("disconnect")

@@ -17,11 +17,13 @@ enum Role {
 }
 
 model User {
-    id        Int      @id @default(autoincrement())
+    id        Int  @id @default(autoincrement())
     name      String
-    username      String
+    username  String
     email     String   @unique
     password  String
+    profile   String
     role      Role     @default(USER)
     createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 }
