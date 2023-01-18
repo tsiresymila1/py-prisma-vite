@@ -8,6 +8,7 @@ from starlite.exceptions import MethodNotAllowedException
 
 from starlite.contrib.jinja import JinjaTemplateEngine
 from pydantic_openapi_schema.v3_1_0 import Components, SecurityScheme
+from app.middleware import CORSMiddleware
 
 from modules import SocketManager
 
@@ -33,8 +34,9 @@ def handle_method_not_allowed(request: Request, exc: MethodNotAllowedException) 
 
 startite_app = Starlite(
     route_handlers=[web_router, api_router],
+    middleware=[CORSMiddleware],
     plugins=[prisma_plugin],
-    cors_config=CORSConfig(),
+    # cors_config=CORSConfig(allow_credentials=True),
     exception_handlers={
         HTTP_405_METHOD_NOT_ALLOWED: handle_method_not_allowed
     },

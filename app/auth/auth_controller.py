@@ -6,6 +6,7 @@ from starlite import ASGIConnection, Body, Controller, Provide, Request, Request
 from starlite.contrib.jwt import Token, JWTAuth
 from prisma.models import User
 import os
+from datetime import timedelta
 
 from app.user.user_service import UserService
 from app.auth.dto import LoginDto, RegisterDto
@@ -13,7 +14,7 @@ from app.auth.dto import LoginDto, RegisterDto
 
 class AuthController(Controller):
     tags = ["Auth"]
-    path = "/"
+    path = "/auth"
 
     dependencies = {"service": Provide(UserService)}
 
@@ -32,7 +33,7 @@ class AuthController(Controller):
         return None
 
     @post("/login")
-    async def login(self, service: UserService,request: "Request[Any, Any]", data: LoginDto = Body(media_type=RequestEncodingType.JSON)) -> Response[User]:
+    async def login(self, service: UserService, request: "Request[Any, Any]", data: LoginDto = Body(media_type=RequestEncodingType.JSON)) -> Response[User]:
         user: User | None = await service.get_use_by_email(data.email)
         if user:
             p = user.password.encode('utf8')
@@ -42,6 +43,7 @@ class AuthController(Controller):
                 if is_verify_password:
                     await request.cache.set(str(user.id), user.dict())
                     response = self.auth.login(
+                        token_expiration=timedelta(days=1),
                         identifier=str(user.id), response_body=user)
                     return response
                 else:

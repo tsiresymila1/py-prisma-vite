@@ -2,7 +2,7 @@ from prisma import Prisma
 from prisma.models import User
 from starlite import Body, Controller, Provide, RequestEncodingType, Response, get, post, put
 from typing import Any
-
+import json 
 from app.user.dto import CreateUserDTO, UpdateUserDTO
 from app.user.user_service import UserService
 
@@ -15,8 +15,9 @@ class UserController(Controller):
     dependencies = {"service": Provide(UserService)}
 
     @get()
-    async def get(self, service: UserService) -> list[User]:
-        return await service.list()
+    async def get(self, service: UserService) -> list[dict[str,Any]]:
+        users = await service.list()
+        return [u.dict() for u in users]
 
     @post()
     async def create(self, service: UserService, data: CreateUserDTO = Body(media_type=RequestEncodingType.MULTI_PART)) -> dict[str, Any]:

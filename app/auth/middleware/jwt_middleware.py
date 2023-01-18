@@ -17,4 +17,4 @@ class JWTAuthenticationMiddleware(AbstractAuthenticationMiddleware):
         raise NotAuthorizedException()
 
 
-jwt_auth = DefineMiddleware(JWTAuthenticationMiddleware, exclude=[])
+jwt_auth = DefineMiddleware(JWTAuthenticationMiddleware, exclude=["/api/auth/login","/api/auth/register"])

@@ -23,7 +23,11 @@ class Vite:
     def URL():
         host = os.getenv("VITE_HOST", 'localhost')
         port = os.getenv("VITE_PORT", 5133)
+        src = os.getenv("VITE_SRC")
+        if src != None :
+            return f"http://{host}:{port}/{src}"
         return f"http://{host}:{port}"
+        
 
     @staticmethod
     def getManifest() -> dict[str, Any]:
