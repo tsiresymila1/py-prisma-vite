@@ -12,7 +12,7 @@
     "lib": ["ESNext", "DOM","ES2021"],
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["vite-env.d.ts"]
+    "types": ["vite-env.d.ts","vite/client"]
     
   },
   "include": ["assets/**/*.ts", "assets/**/*.d.ts", "assets/**/*.tsx", "assets/**/*.vue"],

@@ -1,4 +1,3 @@
-
 from typing import Any
 from aiomcache import ValidationException
 import bcrypt
@@ -12,6 +11,13 @@ from app.user.user_service import UserService
 from app.auth.dto import LoginDto, RegisterDto
 
 
+async def retrieve_user_handler(token: Token, connection: ASGIConnection) -> User | None:
+    cached_value = await connection.cache.get(token.sub)
+    if cached_value:
+        return User(**cached_value)
+    return None
+
+
 class AuthController(Controller):
     tags = ["Auth"]
     path = "/auth"
@@ -21,19 +27,14 @@ class AuthController(Controller):
     def __init__(self, owner: "Router") -> None:
         super().__init__(owner)
         self.auth = JWTAuth[User](
-            retrieve_user_handler=self.retrieve_user_handler,
-            token_secret=os.getenv('JWT_SECRET'),
+            retrieve_user_handler=retrieve_user_handler,
+            token_secret=os.getenv('JWT_SECRET', 'adbcdabdcd'),
             exclude=[],
         )
 
-    async def retrieve_user_handler(self, token: Token, connection: ASGIConnection) -> User | None:
-        cached_value = await connection.cache.get(token.sub)
-        if cached_value:
-            return User(**cached_value)
-        return None
-
     @post("/login")
-    async def login(self, service: UserService, request: "Request[Any, Any]", data: LoginDto = Body(media_type=RequestEncodingType.JSON)) -> Response[User]:
+    async def login(self, service: UserService, request: "Request[Any, Any]",
+                    data: LoginDto = Body(media_type=RequestEncodingType.JSON)) -> Response[User]:
         user: User | None = await service.get_use_by_email(data.email)
         if user:
             p = user.password.encode('utf8')
@@ -54,6 +55,7 @@ class AuthController(Controller):
             raise ValidationException(msg="User not found")
 
     @post("/register")
-    async def register(self,  service: UserService, data: RegisterDto = Body(media_type=RequestEncodingType.MULTI_PART)) -> Response[User]:
+    async def register(self, service: UserService,
+                       data: RegisterDto = Body(media_type=RequestEncodingType.MULTI_PART)) -> dict:
         user: dict = await service.create_user(data)
-        return Response(user)
+        return user
