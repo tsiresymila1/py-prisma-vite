@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 from starlite.datastructures import Headers, MutableScopeHeaders
 from starlite.enums import ScopeType
 from starlite.middleware.base import AbstractMiddleware
-from starlite.config.cors import CORSConfig
 from starlite.types import ASGIApp, Message, Receive, Scope, Send
-    
+
 if TYPE_CHECKING:
     from starlite.config.cors import CORSConfig
     from starlite.types import ASGIApp, Message, Receive, Scope, Send
+
 
 class CORSMiddleware(AbstractMiddleware):
     """CORS Middleware."""
@@ -23,7 +23,7 @@ class CORSMiddleware(AbstractMiddleware):
             config: An instance of [CORSConfig][starlite.config.cors.CORSConfig]
         """
         super().__init__(app=app, scopes={ScopeType.HTTP})
-        self.config = CORSConfig(allow_credentials=True,allow_origins=["*"])
+        self.config = CORSConfig(allow_credentials=True, allow_origins=["*"])
 
     async def __call__(self, scope: "Scope", receive: "Receive", send: "Send") -> None:
         """ASGI callable.
@@ -64,14 +64,11 @@ class CORSMiddleware(AbstractMiddleware):
                 headers.update(self.config.simple_headers)
 
                 if (self.config.is_allow_all_origins and has_cookie) or (
-                    not self.config.is_allow_all_origins and self.config.is_origin_allowed(origin=origin)
+                        not self.config.is_allow_all_origins and self.config.is_origin_allowed(origin=origin)
                 ):
-
                     headers["Access-Control-Allow-Origin"] = origin
                     headers["Vary"] = "Origin"
 
             await send(message)
 
         return wrapped_send
-
-

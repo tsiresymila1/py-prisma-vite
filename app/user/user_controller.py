@@ -1,8 +1,6 @@
-from prisma import Prisma
-from prisma.models import User
-from starlite import Body, Controller, Provide, RequestEncodingType, Response, get, post, put
+
+from starlite import Body, Controller, Provide, RequestEncodingType, get, post, put
 from typing import Any
-import json 
 from app.user.dto import CreateUserDTO, UpdateUserDTO
 from app.user.user_service import UserService
 
