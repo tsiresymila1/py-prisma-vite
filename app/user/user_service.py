@@ -24,10 +24,10 @@ class UserService:
         return await self._db.user.find_many()
 
     async def create_user(self, data: CreateUserDTO | RegisterDto) -> dict[str, Any]:
-        filename = await save_file(data.profile, encrypted=True)
+        filename = await save_file(data.image, encrypted=True)
         user_data = {
             **data.dict(),
-            "profile": filename,
+            "image": filename,
             "password": hash_pasword(data.password)
         }
         user: User = await self._db.user.create(user_data)

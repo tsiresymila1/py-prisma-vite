@@ -14,7 +14,7 @@ class RegisterDto(BaseModel):
     email: str
     password: str
     role: Role
-    profile: UploadFile
+    image: UploadFile
 
     class Config(BaseConfig):
         arbitrary_types_allowed = True

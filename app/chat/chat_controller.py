@@ -4,6 +4,7 @@ from prisma.models import Conversation
 
 from app.chat.chat_service import ChatService
 from app.chat.dto import CreateConversationDTO
+from app.message.message_service import MessageService
 
 
 class ChatController(Controller):
@@ -12,12 +13,20 @@ class ChatController(Controller):
     tags = ['Chats']
     security = [{"BearerToken": []}]
 
-    dependencies = {"service": Provide(ChatService)}
+    dependencies = {
+        "message_service": Provide(MessageService),
+        "service": Provide(ChatService)
+    }
 
     @get()
-    def chat(self, request: Request, service: ChatService) -> list[Conversation]:
-        return service.list_chat(request.user.id)
+    async def chat(self, request: Request, service: ChatService) -> list[Conversation]:
+        return await service.list_chat(request.user.id)
 
     @post()
-    def create(self, data: CreateConversationDTO, request: Request[Any, Any]) -> None:
-        ...
+    async def create(self, service: ChatService, data: CreateConversationDTO, request: Request[Any, Any]) -> Conversation:
+        return await service.create_chat(request.user, data.ids)
+
+    @post('/find')
+    async def find(self, service: ChatService, data: CreateConversationDTO, request: Request[Any, Any]) -> Conversation:
+        conversation: Conversation = await service.find_conversation(request.user, data.ids)
+        return conversation

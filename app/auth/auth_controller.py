@@ -55,7 +55,11 @@ class AuthController(Controller):
             raise ValidationException(msg="User not found")
 
     @post("/register")
-    async def register(self, service: UserService,
-                       data: RegisterDto = Body(media_type=RequestEncodingType.MULTI_PART)) -> dict:
+    async def register(self, service: UserService,request: "Request[Any, Any]",
+                       data: RegisterDto = Body(media_type=RequestEncodingType.MULTI_PART)) -> Response[dict]:
         user: dict = await service.create_user(data)
-        return user
+        await request.cache.set(str(user.id), user.dict())
+        response = self.auth.login(
+            token_expiration=timedelta(days=1),
+            identifier=str(user.id), response_body=user)
+        return response

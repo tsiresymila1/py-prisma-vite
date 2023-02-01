@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 from prisma import Prisma
-from starlite import CORSConfig, Request, Response, Starlite, OpenAPIConfig, State, StaticFilesConfig, TemplateConfig, HttpMethod
+from starlite import CORSConfig, Request, Response, Starlite, OpenAPIConfig, CacheConfig, StaticFilesConfig, TemplateConfig, HttpMethod
 from starlite.response import RedirectResponse
 from starlite.status_codes import HTTP_405_METHOD_NOT_ALLOWED
 from starlite.exceptions import MethodNotAllowedException
@@ -38,6 +38,7 @@ startite_app = Starlite(
     exception_handlers={
         HTTP_405_METHOD_NOT_ALLOWED: handle_method_not_allowed
     },
+    cache_config=CacheConfig(expiration=3600*24),
     openapi_config=OpenAPIConfig(
         title="WEBSEC API",
         version="1.0.0",
