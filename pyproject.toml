@@ -5,6 +5,10 @@ description = ""
 authors = ["tsiresymila <tsiresymila@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    { include = "websec" },
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,8 +22,8 @@ websockets = "10.4"
 pydantic-partial = "^0.3.3"
 
 [tool.poetry.scripts]
-db-push = "command:dbpush"
-db-migrate = "command:migrate"
+db-push = "websec.command:dbpush"
+db-migrate = "websec.command:migrate"
 
 [tool.poetry.group.dev.dependencies]
 uvicorn = "^0.20.0"
@@ -27,3 +31,5 @@ uvicorn = "^0.20.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+

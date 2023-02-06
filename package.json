@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vite",
-    "build": "vite build --debug",
+    "build": "vite build --debug --watch",
     "dev": "vite serve",
     "preview": "vite preview"
   },
@@ -25,6 +25,7 @@
     "vite": "^4.0.4",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-full-reload": "^1.0.5",
+    "vite-plugin-singlefile": "^0.13.2",
     "vue-tsc": "^1.0.22"
   },
   "dependencies": {

@@ -10,7 +10,7 @@ export default function ViteStarlitePlugin(config?: {
   entry?: string;
   output?: string;
   port?: number;
-  host?: string; 
+  host?: string;
   apiServer?: string;
   isHttps?: boolean;
 }): PluginOption {
@@ -23,15 +23,16 @@ export default function ViteStarlitePlugin(config?: {
     port: config?.port ?? 5133,
     host: config?.host ?? "localhost",
     apiServer: config?.apiServer ?? "http://localhost:8000",
-    isHttps: config?.isHttps ?? false, 
+    isHttps: config?.isHttps ?? false,
   };
   let resolvedConfig: ResolvedConfig;
   return {
     name: "vite-starlite-plugin",
-    config(config) {
+    config(config, env) {
+      console.log("env:", env.mode);
       return {
         ...config,
-        base: `./${config?.base ?? ''}`,
+        base: `./${config?.base ?? ""}`,
         root: pluginConfig.root,
         publicDir: pluginConfig.public,
         define: {
@@ -45,13 +46,16 @@ export default function ViteStarlitePlugin(config?: {
           middlewareMode: false,
           // open: join(__dirname, 'dev-server-index.html'),
           open: false,
-          proxy: {
-            "/api": {
-              target: pluginConfig.apiServer,
-              changeOrigin: true,
-              //   rewrite: (path) => path.replace(/^\/api/, ""),
-            },
-          },
+          proxy:
+            env.mode !== "production"
+              ? {
+                  "/api": {
+                    target: pluginConfig.apiServer,
+                    changeOrigin: true,
+                    //   rewrite: (path) => path.replace(/^\/api/, ""),
+                  },
+                }
+              : undefined,
         },
         optimizeDeps: {
           entries: [resolve(pluginConfig.root, pluginConfig.entry)],
@@ -67,17 +71,10 @@ export default function ViteStarlitePlugin(config?: {
             cache: false,
             output: {
               format: "cjs",
-              manualChunks: undefined,
-              chunkFileNames: (chunk) => {
-                console.log("Chunk", chunk);
-                return `[name].js`;
-              },
+              // manualChunks:  () => 'app.js',
               assetFileNames: (assetInfo) => {
-                if (assetInfo.name === "main.css") {
+                if (assetInfo.name === "style.css") {
                   return `${pluginConfig.output}/app.css`;
-                }
-                if (assetInfo.name === pluginConfig.entry) {
-                  return `${pluginConfig.output}/app.js`;
                 }
                 return `${pluginConfig.output}/${assetInfo.name}` ?? "app.js";
               },

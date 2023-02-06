@@ -47,6 +47,7 @@ model User {
 
 model Conversation {
     id           Int       @id @default(autoincrement())
+    title        String?   
     participants User[]    @relation("UserConversation")
     messages     Message[]
     initiatorId  Int

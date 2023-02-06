@@ -57,6 +57,9 @@ class Vite:
             csss: list[str] =  manifest.get(entry)['css']
             for css in csss :
                 urls.append(css)
+        elif "style.css" in manifest.keys() :
+            css = manifest.get("style.css")["file"]
+            urls.append(css)
         return urls
 
     @staticmethod

@@ -22,11 +22,7 @@ class ChatController(Controller):
     async def chat(self, request: Request, service: ChatService) -> list[Conversation]:
         return await service.list_chat(request.user.id)
 
-    @post()
-    async def create(self, service: ChatService, data: CreateConversationDTO, request: Request[Any, Any]) -> Conversation:
-        return await service.create_chat(request.user, data.ids)
-
-    @post('/find')
+    @post('')
     async def find(self, service: ChatService, data: CreateConversationDTO, request: Request[Any, Any]) -> Conversation:
         conversation: Conversation = await service.find_conversation(request.user, data.ids)
         return conversation

@@ -1,5 +1,6 @@
 
-from starlite import Body, Controller, Provide, RequestEncodingType, get, post, put
+from starlite import Body, Controller, Provide, Request, RequestEncodingType, get, post, put
+from prisma.models import User
 from typing import Any
 from app.user.dto import CreateUserDTO, UpdateUserDTO
 from app.user.user_service import UserService
@@ -12,6 +13,10 @@ class UserController(Controller):
 
     dependencies = {"service": Provide(UserService)}
 
+    @get('/me')
+    async def me(self, request: Request[Any,Any],service: UserService) -> User | None:
+        return await service.get_use_by_id(id=request.user.id)
+    
     @get()
     async def get(self, service: UserService) -> list[dict[str,Any]]:
         users = await service.list()
