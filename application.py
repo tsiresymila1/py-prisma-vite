@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import Any
 from prisma import Prisma
@@ -79,7 +80,7 @@ async def message(sid: Any, data: Any):
     db: Prisma = io.load_dependancy("db")
     users = await db.user.find_many()
     print("message : ", sid, data)
-    await io.emit('message', {"response": [u.dict() for u in users]})
+    await io.emit('message', json.dumps({"response": [u.dict() for u in users]}))
 
 
 @io.on("disconnect")
