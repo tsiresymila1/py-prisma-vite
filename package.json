@@ -8,7 +8,8 @@
     "start": "vite",
     "build": "vite build --debug --watch",
     "dev": "vite serve",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel-build": "prisma generate --schema ./database/schema.prisma && prisma migrate deploy  --schema ./database/schema.prisma && vite build"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
