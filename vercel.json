@@ -4,5 +4,6 @@
   ],
   "routes": [
     {"src": "/(.*)", "dest": "application.py"}
-  ]
+  ],
+  "buildCommand": "prisma generate --schema ./database/schema.prisma && prisma migrate deploy  --schema ./database/schema.prisma && vite build"
 }
