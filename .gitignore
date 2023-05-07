@@ -12,3 +12,4 @@ package-lock.json
 public/manifest.json
 public/static/js/bundle
 !public/static/.gitkeep
+.vercel

@@ -1,3 +1,4 @@
+from typing import Union
 from prisma import Prisma
 from prisma.models import Conversation, User
 
@@ -14,7 +15,7 @@ class ChatService:
         self._message_service = message_service
 
     async def list_chat(self, user_id: int) -> list[Conversation]:
-        user: User | None = await self._db.user.find_first(
+        user: Union[User,None] = await self._db.user.find_first(
             where={
                 "id": user_id,
             }, include={
@@ -63,7 +64,7 @@ class ChatService:
         return conversation
 
     async def find_conversation(self, user: User, ids: list[int]) -> Conversation:
-        conversation:  Conversation | None = await self._db.conversation.find_first(
+        conversation:  Union[Conversation,None] = await self._db.conversation.find_first(
             where={
                 "AND": [{"participants": {"some": {"id": user.id}}}] + [{"participants": {"some": {"id": id}}} for id in ids]
             },

@@ -22,7 +22,7 @@ websockets = "10.4"
 pydantic-partial = "^0.3.3"
 
 [tool.poetry.scripts]
-db-push = "websec.command:dbpush"
+db-push = "websec.command:db_push"
 db-migrate = "websec.command:migrate"
 
 [tool.poetry.group.dev.dependencies]

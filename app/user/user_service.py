@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Union
 import bcrypt
 from prisma import Prisma
 from prisma.models import User
@@ -14,7 +14,7 @@ class UserService:
     def __init__(self, db: Prisma) -> None:
         self._db = db
 
-    async def get_use_by_id(self, id: str | int) -> Optional[User]:
+    async def get_use_by_id(self, id: Union[str,int]) -> Optional[User]:
         return await self._db.user.find_unique(where={"id": id})
 
     async def get_use_by_email(self, email: str) -> Optional[User]:
@@ -23,7 +23,7 @@ class UserService:
     async def list(self) -> list[User]:
         return await self._db.user.find_many()
 
-    async def create_user(self, data: CreateUserDTO | RegisterDto) -> dict[str, Any]:
+    async def create_user(self, data: Union[CreateUserDTO,RegisterDto]) -> User:
         filename = await save_file(data.image, encrypted=True)
         user_data = {
             **data.dict(),
@@ -31,4 +31,4 @@ class UserService:
             "password": hash_pasword(data.password)
         }
         user: User = await self._db.user.create(user_data)
-        return user.dict()
+        return user

@@ -1,11 +1,10 @@
 {
+  "version": 2,
   "builds": [
     {
-      "src": "/(.*)",
-      "use": "prisma generate --schema ./database/schema.prisma && prisma migrate deploy  --schema ./database/schema.prisma && vite build"
-    },
-    { "src": "/application.py", "use": "@vercel/python" }
+      "src": "./application.py",
+      "use": "@tsiresy/python-prisma"
+    }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "application.py" }],
-  "buildCommand": "prisma generate --schema ./database/schema.prisma && prisma migrate deploy  --schema ./database/schema.prisma && vite build"
+  "routes": [{ "src": "/(.*)", "dest": "application.py" }]
 }

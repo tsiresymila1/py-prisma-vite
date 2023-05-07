@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union
 from aiomcache import ValidationException
 import bcrypt
 from starlite import ASGIConnection, Body, Controller, Provide, Request, RequestEncodingType, Response, Router, post
@@ -11,7 +11,7 @@ from app.user.user_service import UserService
 from app.auth.dto import LoginDto, RegisterDto
 
 
-async def retrieve_user_handler(token: Token, connection: ASGIConnection) -> User | None:
+async def retrieve_user_handler(token: Token, connection: ASGIConnection) -> Union[User,None]:
     cached_value = await connection.cache.get(token.sub)
     if cached_value:
         return User(**cached_value)
@@ -35,7 +35,7 @@ class AuthController(Controller):
     @post("/login")
     async def login(self, service: UserService, request: "Request[Any, Any]",
                     data: LoginDto = Body(media_type=RequestEncodingType.JSON)) -> Response[User]:
-        user: User | None = await service.get_use_by_email(data.email)
+        user: Union[User,None] = await service.get_use_by_email(data.email)
         if user:
             p = user.password.encode('utf8')
             try:
@@ -61,5 +61,5 @@ class AuthController(Controller):
         await request.cache.set(str(user.id), user.dict())
         response = self.auth.login(
             token_expiration=timedelta(days=1),
-            identifier=str(user.id), response_body=user)
+            identifier=str(user.id), response_body=user) 
         return response
