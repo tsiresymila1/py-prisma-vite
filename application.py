@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 from typing import Any
 from prisma import Prisma
-from starlite import CORSConfig, Request, Response, Starlite, OpenAPIConfig, CacheConfig, StaticFilesConfig, TemplateConfig, HttpMethod
+from starlite import CORSConfig, Request, Response, Starlite, OpenAPIConfig, CacheConfig, StaticFilesConfig, \
+    TemplateConfig, HttpMethod
 from starlite.response import RedirectResponse
 from starlite.status_codes import HTTP_405_METHOD_NOT_ALLOWED
 from starlite.exceptions import MethodNotAllowedException
@@ -14,7 +15,6 @@ from modules import SocketManager
 from routes import web_router, api_router
 from ressources import Vite
 from database.plugin import PrismaPlugin
-
 
 prisma_plugin = PrismaPlugin()
 
@@ -39,7 +39,7 @@ startite_app = Starlite(
     exception_handlers={
         HTTP_405_METHOD_NOT_ALLOWED: handle_method_not_allowed
     },
-    cache_config=CacheConfig(expiration=3600*24),
+    cache_config=CacheConfig(expiration=3600 * 24),
     openapi_config=OpenAPIConfig(
         title="WEBSEC API",
         version="1.0.0",
@@ -50,7 +50,7 @@ startite_app = Starlite(
                     scheme="bearer",
                 )
             },
-        ),),
+        ), ),
     template_config=template_config,
     debug=True,
     static_files_config=[
@@ -72,12 +72,12 @@ app = io.get_asgi_app()
 
 @io.on("connect")
 def connect(sid: Any, environ: Any):
-    print("Client connected : ")
+    print("Client connected : ", sid, environ)
 
 
 @io.on('message')
 async def message(sid: Any, data: Any):
-    db: Prisma = io.load_dependancy("db")
+    db: Prisma = io.load_dependency("db")
     users = await db.user.find_many()
     print("message : ", sid, data)
     await io.emit('message', json.dumps({"response": [u.dict() for u in users]}))

@@ -46,7 +46,7 @@ class SocketManager:
     async def socket_io_handler(self, scope: Scope, receive: Receive, send: Send) -> None:
         await self._app(scope=scope, receive=receive, send=send)
 
-    def load_dependancy(self, key: str) -> T:
+    def load_dependency(self, key: str) -> T:
         if key in self._dependencies.keys() :
             return self._dependencies[key]()
         return None
